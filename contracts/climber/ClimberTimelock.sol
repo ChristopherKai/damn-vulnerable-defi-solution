@@ -89,6 +89,7 @@ contract ClimberTimelock is AccessControl {
     }
 
     /** Anyone can execute what has been scheduled via `schedule` */
+    // 违背check-effects-interactions模式
     function execute(
         address[] calldata targets,
         uint256[] calldata values,

@@ -1,5 +1,7 @@
 ![](cover.png)
 
+运行：`npx hardhat test .\test\free-rider\free-rider.challenge.js`
+
 **A set of challenges to learn offensive security of smart contracts in Ethereum.**
 
 Featuring flash loans, price oracles, governance, NFTs, lending pools, smart contract wallets, timelocks, and more!

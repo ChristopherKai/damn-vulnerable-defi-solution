@@ -13,6 +13,10 @@ import "@gnosis.pm/safe-contracts/contracts/proxies/IProxyCreationCallback.sol";
  * @dev The registry has embedded verifications to ensure only legitimate Gnosis Safe wallets are stored.
  * @author Damn Vulnerable DeFi (https://damnvulnerabledefi.xyz)
  */
+
+ // 漏洞；未能正确使用GnosisSafe，在创建钱包(Proxy)时可通过fallback的delegatecall执行任意代码
+ // 这里由于限定require(bytes4(initializer[:4]) == GnosisSafe.setup.selector, "Wrong initialization");
+ // 使用setup(...to,data...)进行任意代码调用
 contract WalletRegistry is IProxyCreationCallback, Ownable {
     
     uint256 private constant MAX_OWNERS = 1;

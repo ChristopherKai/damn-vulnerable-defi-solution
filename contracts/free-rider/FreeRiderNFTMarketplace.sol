@@ -4,11 +4,12 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../DamnValuableNFT.sol";
-
+import "hardhat/console.sol";
 /**
  * @title FreeRiderNFTMarketplace
  * @author Damn Vulnerable DeFi (https://damnvulnerabledefi.xyz)
  */
+ // 逻辑漏洞：
 contract FreeRiderNFTMarketplace is ReentrancyGuard {
 
     using Address for address payable;
@@ -60,7 +61,7 @@ contract FreeRiderNFTMarketplace is ReentrancyGuard {
     }
 
     function buyMany(uint256[] calldata tokenIds) external payable nonReentrant {
-        for (uint256 i = 0; i < tokenIds.length; i++) {
+        for (uint256 i = 0; i < tokenIds.length; i++) {  // 逻辑漏洞：购买多个NFT只需msg.value > 最高价格
             _buyOne(tokenIds[i]);
         }
     }
@@ -72,12 +73,12 @@ contract FreeRiderNFTMarketplace is ReentrancyGuard {
         require(msg.value >= priceToPay, "Amount paid is not enough");
 
         amountOfOffers--;
-
+        
         // transfer from seller to buyer
         token.safeTransferFrom(token.ownerOf(tokenId), msg.sender, tokenId);
 
         // pay seller
-        payable(token.ownerOf(tokenId)).sendValue(priceToPay);
+        payable(token.ownerOf(tokenId)).sendValue(priceToPay); // 逻辑漏洞：先转NFT，再给买方转ETH
 
         emit NFTBought(msg.sender, tokenId, priceToPay);
     }    

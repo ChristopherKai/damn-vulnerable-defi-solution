@@ -31,6 +31,9 @@ describe('[Challenge] Naive receiver', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */   
+        const factory = await ethers.getContractFactory('NativeReceiverExp');
+        const exp = await factory.deploy(this.receiver.address, this.pool.address);
+        
     });
 
     after(async function () {

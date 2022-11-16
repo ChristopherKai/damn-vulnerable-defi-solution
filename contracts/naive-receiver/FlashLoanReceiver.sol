@@ -17,9 +17,10 @@ contract FlashLoanReceiver {
         pool = poolAddress;
     }
 
+    // 未授权调用
     // Function called by the pool during flash loan
     function receiveEther(uint256 fee) public payable {
-        require(msg.sender == pool, "Sender must be pool");
+        require(msg.sender == pool, "Sender must be pool"); 
 
         uint256 amountToBeRepaid = msg.value + fee;
 

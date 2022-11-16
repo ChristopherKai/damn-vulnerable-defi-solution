@@ -50,7 +50,7 @@ contract TheRewarderPool {
         require(amountToDeposit > 0, "Must deposit tokens");
         
         accToken.mint(msg.sender, amountToDeposit);
-        distributeRewards();
+        distributeRewards(); // 仅考虑了存钱即可铸造奖励token，未考虑到闪电贷这种特殊功能，存取在一笔交易，错误发放了奖励代币
 
         require(
             liquidityToken.transferFrom(msg.sender, address(this), amountToDeposit)

